@@ -1,52 +1,96 @@
-'use client'
+"use client";
 
-import { useRef } from 'react'
-import type { AppScreen, PanoramicCanvasWorkspaceProps } from '@/types'
-import { updateScreen } from '@/actions/projectState'
-import SingleCanvasInstance from './SingleCanvasInstance'
+import { useRef, useState, useLayoutEffect } from "react";
+import type { AppScreen, PanoramicCanvasWorkspaceProps } from "@/types";
+import { updateScreen } from "@/actions/projectState";
+import SingleCanvasInstance from "./SingleCanvasInstance";
 
-// مساحة العمل الأفقية لعرض الشاشات الخمس مع دعم التمرير 
 export default function PanoramicCanvasWorkspace({
   project,
   stageRefs,
   onChange,
 }: PanoramicCanvasWorkspaceProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const previewAreaRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.2);
+  const activeIndex = Math.max(
+    0,
+    project.screens.findIndex((screen) => screen.id === project.activeScreenId),
+  );
+  const activeScreen = project.screens[activeIndex];
 
-  // تحويل التمرير العمودي لعجلات الفأرة إلى تمرير أفقي
-  const handleWheel = (e: React.WheelEvent) => {
-    if (containerRef.current && e.deltaY !== 0) {
-      containerRef.current.scrollLeft += e.deltaY
-    }
-  }
+  useLayoutEffect(() => {
+    if (!activeScreen) return;
+    const isMobile = window.innerWidth < 768;
+    const isLandscape = activeScreen.config?.layout === "text-left";
+    const canvasWidth = isLandscape ? 2778 : 1242;
+    const canvasHeight = isLandscape ? 1284 : 2688;
+    const availableWidth =
+      window.innerWidth - (isMobile ? (isLandscape ? 144 : 104) : 160);
+    const availableHeight = window.innerHeight - (isMobile ? 300 : 240);
+    const fitScale = Math.min(
+      availableWidth / canvasWidth,
+      availableHeight / canvasHeight,
+    );
+    setScale(fitScale);
+  }, [activeScreen?.id, activeScreen?.config?.layout]);
 
   const handleUpload = (screenId: string, dataUrl: string) => {
-    onChange(updateScreen(project, screenId, { screenshotUrl: dataUrl }))
-  }
+    onChange(updateScreen(project, screenId, { screenshotUrl: dataUrl }));
+  };
 
   const handleUpdateText = (screenId: string, updates: Partial<AppScreen>) => {
-    onChange(updateScreen(project, screenId, updates))
-  }
+    onChange(updateScreen(project, screenId, updates));
+  };
+
+  if (!activeScreen) return null;
 
   return (
-    <div
-      ref={containerRef}
-      onWheel={handleWheel}
-      className="flex w-full items-center justify-start overflow-x-auto gap-4 md:gap-8 px-6 md:px-16 py-6 md:py-10 scroll-smooth select-none scrollbar-none touch-pan-x"
-    >
-      {project.screens.map((screen, index) => (
-        <SingleCanvasInstance
-          key={screen.id}
-          screen={screen}
-          project={project}
-          isActive={screen.id === project.activeScreenId}
-          onClick={() => onChange({ ...project, activeScreenId: screen.id })}
-          onUpload={(url) => handleUpload(screen.id, url)}
-          onUpdateText={(updates) => handleUpdateText(screen.id, updates)}
-          stageRef={stageRefs[index]}
-        />
-      ))}
-    </div>
-  )
-}
+    <section className="relative flex h-full min-h-0 w-full flex-col items-center gap-4 px-5 pb-24 sm:gap-6 sm:px-6 sm:pb-5">
+      <nav
+        aria-label="اختيار الشاشة"
+        className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex w-auto items-center justify-center gap-2 sm:static sm:gap-3"
+      >
+        {project.screens.map((screen, index) => {
+          const isActive = screen.id === activeScreen.id;
+          return (
+            <button
+              key={screen.id}
+              type="button"
+              onClick={() =>
+                onChange({ ...project, activeScreenId: screen.id })
+              }
+              aria-label={`الشاشة ${index + 1}`}
+              aria-current={isActive ? "step" : undefined}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-sm font-bold transition-colors sm:h-12 sm:w-12 sm:text-base ${
+                isActive
+                  ? "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-300 hover:bg-blue-50"
+              }`}
+            >
+              {index + 1}
+            </button>
+          );
+        })}
+      </nav>
 
+      <div
+        ref={previewAreaRef}
+        className="flex min-h-0 w-full flex-1 items-center justify-center overflow-visible px-1 sm:px-0"
+      >
+        <SingleCanvasInstance
+          key={activeScreen.id}
+          screen={activeScreen}
+          project={project}
+          isActive
+          onClick={() =>
+            onChange({ ...project, activeScreenId: activeScreen.id })
+          }
+          onUpload={(url) => handleUpload(activeScreen.id, url)}
+          onUpdateText={(updates) => handleUpdateText(activeScreen.id, updates)}
+          stageRef={stageRefs[activeIndex]}
+          scale={scale}
+        />
+      </div>
+    </section>
+  );
+}

@@ -1,36 +1,39 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
+
+const description =
+  "نسّق لقطات تطبيقك لمتجري App Store وGoogle Play. أضف الصور والنصوص والشعار والخلفية، ثم صدّر التصميم بصيغة PNG عالية الدقة.";
+const previewImage =
+  "https://raw.githubusercontent.com/ln6ie/Shotly/main/public/logo.png";
 
 export const siteMetadata: Metadata = {
-  metadataBase: new URL("https://raqeemrender.netlify.app"),
-  title: "Raqeem Render — صانع لقطات الشاشة البانورامية لتطبيقات الجوال",
-  description: "صمم لقطات شاشتك لمتجر التطبيقات بأسلوب بانورامي متكامل مجاناً وبأعلى دقة دون تسجيل أو إعلانات.",
-  keywords: ["تصميم لقطات شاشة", "App Store screenshots", "لقطات شاشة بانورامية", "Raqeem Render", "رقيم ريندر", "تصدير فريمات"],
-  authors: [{ name: "Raqeem Render" }],
+  title: "Shotly — صانع لقطات شاشة التطبيقات",
+  description,
+  applicationName: "Shotly",
+  keywords: [
+    "Shotly",
+    "تصميم لقطات شاشة",
+    "لقطات تطبيقات",
+    "App Store screenshots",
+    "Google Play screenshots",
+  ],
+  authors: [{ name: "ln6ie", url: "https://github.com/ln6ie" }],
   openGraph: {
-    title: "Raqeem Render — صانع لقطات الشاشة البانورامية",
-    description: "صمم لقطات شاشتك لمتجر التطبيقات بأسلوب بانورامي متكامل مجاناً وبأعلى دقة دون تسجيل أو إعلانات.",
-    url: "https://raqeemrender.netlify.app/",
-    siteName: "Raqeem Render",
-    images: [
-      {
-        url: "/logo.png",
-        width: 512,
-        height: 512,
-        alt: "لوغو Raqeem Render",
-      },
-    ],
-    locale: "ar_EG",
+    title: "Shotly — صانع لقطات شاشة التطبيقات",
+    description,
+    siteName: "Shotly",
+    images: [{ url: previewImage, width: 512, height: 512, alt: "شعار Shotly" }],
+    locale: "ar_IQ",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Raqeem Render — صانع لقطات الشاشة البانورامية",
-    description: "صمم لقطات شاشتك لمتجر التطبيقات بأسلوب بانورامي متكامل مجاناً وبأعلى دقة دون تسجيل أو إعلانات.",
-    images: ["/logo.png"],
+    title: "Shotly — صانع لقطات شاشة التطبيقات",
+    description,
+    images: [previewImage],
   },
   icons: {
-    icon: "/logo.png",
+    icon: [{ url: "/logo.svg", type: "image/svg+xml" }, { url: "/logo.png", type: "image/png" }],
     shortcut: "/logo.png",
     apple: "/logo.png",
   },
-}
+};

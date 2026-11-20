@@ -1,41 +1,30 @@
-'use client'
-
-// اللوغو الرسمي لـ رقيم ريندر (Raqeem Render) مع لمسة أكسنت صفراء متوهجة
-export function RaqeemLogo({ size = 36, className = '' }: { size?: number; className?: string }) {
+export function ShotlyLogo({
+  size = 36,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
-      fill="none"
       width={size}
       height={size}
       className={className}
       role="img"
-      aria-label="Raqeem Logo"
+      aria-label="Shotly"
     >
-      {/* درع خارجي أنيق مقتبس من التصميم الرسمي */}
-      <circle cx="256" cy="256" r="220" stroke="#007AFF" strokeWidth="12" fill="none" opacity="0.9" />
-
-      {/* المونوغرام الفاخر لحرف R المعتمد */}
-      <path
-        d="M170,140 C170,140 280,80 320,160 C360,230 300,300 240,310 C320,340 350,420 350,420"
-        stroke="#007AFF"
-        strokeWidth="26"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path
-        d="M185,120 L185,420"
-        stroke="#007AFF"
-        strokeWidth="30"
-        strokeLinecap="round"
-        fill="none"
-      />
-
-      {/* لمسة الأكسنت الفاخرة: نقطة صفراء متوهجة في الجانب العلوي الأيمن من الشعار */}
-      <circle cx="390" cy="120" r="28" fill="#FFE600" />
-      <circle cx="390" cy="120" r="16" fill="#007AFF" />
+      <rect width="512" height="512" rx="144" fill="#087CFA" />
+      <rect x="150" y="76" width="276" height="330" rx="42" fill="#B9DDFF" />
+      <rect x="86" y="126" width="298" height="316" rx="42" fill="#fff" />
+      <rect x="184" y="148" width="102" height="12" rx="6" fill="#087CFA" />
+      <rect x="122" y="190" width="226" height="126" rx="22" fill="#E8F3FF" />
+      <path d="m147 285 55-55 38 34 39-43 43 79H147v-15Z" fill="#66AEFF" />
+      <circle cx="193" cy="226" r="13" fill="#087CFA" />
+      <rect x="122" y="342" width="154" height="13" rx="6.5" fill="#087CFA" />
+      <rect x="122" y="369" width="210" height="10" rx="5" fill="#B8D9FF" />
+      <rect x="122" y="391" width="176" height="10" rx="5" fill="#B8D9FF" />
     </svg>
-  )
+  );
 }

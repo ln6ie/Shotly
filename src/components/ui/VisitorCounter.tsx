@@ -1,59 +1,37 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-let globalFetchPromise: Promise<number> | null = null
-
-// حساب وعرض عدد زوار الموقع الكلي
-export function VisitorCounter({ className = 'font-medium text-[#64748B]' }: { className?: string }) {
-  const [visitorCount, setVisitorCount] = useState<number>(0)
+export function VisitorCounter({
+  className = "font-medium text-[#64748B]",
+}: {
+  className?: string;
+}) {
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
   useEffect(() => {
-    const namespace = process.env.NEXT_PUBLIC_COUNTER_NAMESPACE || ''
-    const key = process.env.NEXT_PUBLIC_COUNTER_KEY || ''
-    const upUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/up`
-    const getUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/`
+    const namespace = process.env.NEXT_PUBLIC_COUNTER_NAMESPACE;
+    const key = process.env.NEXT_PUBLIC_COUNTER_KEY;
+    if (!namespace || !key) return;
 
-    async function getGlobalCount() {
-      if (globalFetchPromise) {
-        try {
-          const count = await globalFetchPromise
-          setVisitorCount(count)
-        } catch (e) {}
-        return
-      }
+    const hasVisited = sessionStorage.getItem("rq_has_visited");
+    const path = hasVisited ? "/" : "/up";
 
-      const hasVisited = sessionStorage.getItem('rq_has_visited')
-      const targetUrl = !hasVisited ? upUrl : getUrl
-
-      globalFetchPromise = (async () => {
-        const res = await fetch(targetUrl)
-        if (!res.ok) throw new Error('API fetch failed')
-        const data = await res.json()
-        if (data && typeof data.count === 'number') {
-          if (!hasVisited) {
-            sessionStorage.setItem('rq_has_visited', 'true')
-          }
-          return data.count
-        }
-        throw new Error('Invalid response format')
-      })()
-
-      try {
-        const count = await globalFetchPromise
-        setVisitorCount(count)
-      } catch (e) {
-        console.error('CounterAPI error:', e)
-        globalFetchPromise = null
-      }
-    }
-
-    getGlobalCount()
-  }, [])
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}${path}`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (typeof data?.count !== "number") return;
+        setVisitorCount(data.count);
+        if (!hasVisited) sessionStorage.setItem("rq_has_visited", "true");
+      })
+      .catch(() => {
+        // The optional counter must not affect the rest of the page.
+      });
+  }, []);
 
   return (
     <span className={`font-bold ${className}`}>
-      {visitorCount} زيارة
+      {visitorCount === null ? "" : `${visitorCount} زيارة`}
     </span>
-  )
+  );
 }
