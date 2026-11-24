@@ -9,6 +9,7 @@ export default function GradientColorPanel({
   colorBottom,
   stageRef,
   screenId,
+  exportSize,
   onGradientChange,
   onChangeImage,
   onChangeLogo,
@@ -86,7 +87,11 @@ export default function GradientColorPanel({
         type="button"
         onClick={(e) => {
           e.stopPropagation();
-          exportSingleScreen(stageRef.current, `shotly-${screenId}.png`);
+          exportSingleScreen(
+            stageRef.current,
+            exportSize,
+            `shotly-${screenId}.png`,
+          );
         }}
         className="h-5 w-5 rounded-full bg-slate-900 border border-slate-950 text-white shadow-sm flex items-center justify-center transition-transform hover:scale-110 cursor-pointer"
         title="تصدير هذه الشاشة"

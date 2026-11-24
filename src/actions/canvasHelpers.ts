@@ -61,50 +61,50 @@ export function getCanvasDimensions(layout: string): {
   width: number;
   height: number;
 } {
-  if (layout === "text-left") return { width: 2778, height: 1284 };
-  return { width: 1242, height: 2688 };
+  if (layout === "text-left") return { width: 2556, height: 1179 };
+  return { width: 1179, height: 2556 };
 }
 
 export function getLayoutPositions(layout: string): LayoutPositions {
   if (layout === "text-left") {
     return {
-      titleX: 965,
-      titleY: 800,
-      subtitleX: 965,
-      subtitleY: 1050,
-      deviceX: 200,
-      deviceY: 120,
-      badgeY: 60,
-      titleWidth: 1773,
-      subtitleWidth: 1773,
+      titleX: 800,
+      titleY: 320,
+      subtitleX: 800,
+      subtitleY: 610,
+      deviceX: 120,
+      deviceY: 100,
+      badgeY: 40,
+      titleWidth: 1640,
+      subtitleWidth: 1640,
       logoY: 200,
     };
   }
-  let titleX = 80;
-  let titleY = 140;
-  let subtitleY = 270;
-  let deviceY = 380;
-  let badgeY = 60;
+  let titleX = 76;
+  let titleY = 133;
+  let subtitleY = 257;
+  let deviceY = 361;
+  let badgeY = 57;
   if (layout === "text-bottom") {
-    deviceY = 80;
-    titleY = 2410;
-    subtitleY = 2530;
-    badgeY = 2330;
+    deviceY = 76;
+    titleY = 2289;
+    subtitleY = 2404;
+    badgeY = 2214;
   } else if (layout === "hero-center") {
-    titleY = 1170;
-    subtitleY = 1330;
-    badgeY = 1080;
+    titleY = 1112;
+    subtitleY = 1264;
+    badgeY = 1026;
   }
   return {
     titleX,
     titleY,
     subtitleX: titleX,
     subtitleY,
-    deviceX: 103.5,
+    deviceX: 98,
     deviceY,
     badgeY,
-    titleWidth: 1082,
-    subtitleWidth: 1082,
+    titleWidth: 1028,
+    subtitleWidth: 1028,
     logoY: 0,
   };
 }
@@ -120,7 +120,7 @@ export function getScreenDerivedValues(
   );
   const canvas = getCanvasDimensions(layout);
   const isLandscape = layout === "text-left";
-  const deviceScale = isLandscape ? 0.7 : 1;
+  const deviceScale = isLandscape ? 0.44 : 0.95;
   return {
     layout,
     canvasWidth: canvas.width,

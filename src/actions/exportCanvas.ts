@@ -1,25 +1,45 @@
 import type Konva from "konva";
+import type { AppScreen } from "@/types";
+import { getCanvasDimensions } from "@/actions/canvasHelpers";
 
-// تصدير الشاشات الخمس بأعلى دقة  خالية من البكسلة
+type ExportSize = { width: number; height: number };
+
+function stageToDataURL(stage: Konva.Stage, size: ExportSize): string {
+  const original = {
+    width: stage.width(),
+    height: stage.height(),
+    scaleX: stage.scaleX(),
+    scaleY: stage.scaleY(),
+  };
+
+  try {
+    stage.width(size.width);
+    stage.height(size.height);
+    stage.scale({ x: 1, y: 1 });
+    stage.draw();
+
+    return stage.toDataURL({ mimeType: "image/png", pixelRatio: 1 });
+  } finally {
+    stage.width(original.width);
+    stage.height(original.height);
+    stage.scale({ x: original.scaleX, y: original.scaleY });
+    stage.draw();
+  }
+}
+
+// Export every available screen at its exact store-ready dimensions.
 export async function exportPanoramicSet(
   stageRefs: React.RefObject<Konva.Stage | null>[],
+  screens: AppScreen[],
 ): Promise<void> {
-  console.log("=== ULTRA-HQ EXPORT PANORAMIC SET STARTED ===");
-
-  let index = 0;
-  for (const ref of stageRefs) {
-    const stage = ref.current;
-    if (!stage) continue;
+  for (let index = 0; index < stageRefs.length; index++) {
+    const stage = stageRefs[index].current;
+    const screen = screens[index];
+    if (!stage || !screen) continue;
 
     try {
-      // تثبيت معامل التصدير بدقة 4X صافية لضمان خروج النصوص بوضوح الكريستال
-      const pixelRatio = 4;
-
-      const dataURL = stage.toDataURL({
-        pixelRatio: pixelRatio,
-        mimeType: "image/png",
-        quality: 1.0, // دقة كاملة غير مضغوطة
-      });
+      const size = getCanvasDimensions(screen.config?.layout || "text-top");
+      const dataURL = stageToDataURL(stage, size);
 
       const link = document.createElement("a");
       link.download = `shotly-screen-${index + 1}.png`;
@@ -28,31 +48,22 @@ export async function exportPanoramicSet(
       link.click();
       document.body.removeChild(link);
 
-      index++;
       await new Promise((resolve) => setTimeout(resolve, 800));
     } catch (error) {
-      console.error(`Ultra-HQ Export failed at index ${index}:`, error);
+      console.error(`PNG export failed for screen ${index + 1}:`, error);
     }
   }
-  console.log("=== ULTRA-HQ EXPORT PANORAMIC SET FINISHED ===");
 }
 
-// تصدير شاشة فردية واحدة بأعلى دقة  خالية من البكسلة
+// Export a single screen at its exact store-ready dimensions.
 export function exportSingleScreen(
   stage: Konva.Stage | null,
+  size: ExportSize,
   filename = "shotly-screen.png",
 ): void {
   if (!stage) return;
   try {
-    console.log("=== ULTRA-HQ EXPORT SINGLE SCREEN STARTED ===");
-    // استخدام دقة بكسل مضاعفة 4X لضمان ثبات التفاصيل والألوان
-    const pixelRatio = 4;
-
-    const dataURL = stage.toDataURL({
-      pixelRatio: pixelRatio,
-      mimeType: "image/png",
-      quality: 1.0,
-    });
+    const dataURL = stageToDataURL(stage, size);
 
     const link = document.createElement("a");
     link.download = filename;
@@ -60,8 +71,7 @@ export function exportSingleScreen(
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    console.log("=== ULTRA-HQ EXPORT SINGLE SCREEN FINISHED ===");
   } catch (error) {
-    console.error("Ultra-HQ Single Export failed:", error);
+    console.error("PNG export failed:", error);
   }
 }

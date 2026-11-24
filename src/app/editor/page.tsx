@@ -32,8 +32,8 @@ export default function EditorPage() {
   );
 
   const handleExportAll = useCallback(() => {
-    exportPanoramicSet(stageRefs);
-  }, [stageRefs]);
+    exportPanoramicSet(stageRefs, project.screens);
+  }, [stageRefs, project.screens]);
 
   const activeScreen = getActiveScreen(project);
 

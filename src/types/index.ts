@@ -139,6 +139,7 @@ export interface GradientColorPanelProps {
   colorBottom: string;
   stageRef: RefObject<Konva.Stage | null>;
   screenId: string;
+  exportSize: { width: number; height: number };
   onGradientChange: (gradient: string) => void;
   onChangeImage: () => void;
   onChangeLogo: () => void;

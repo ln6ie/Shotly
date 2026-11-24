@@ -200,6 +200,7 @@ export default function SingleCanvasInstance({
           colorBottom={v.colorBottom}
           stageRef={stageRef}
           screenId={screen.id}
+          exportSize={{ width: v.canvasWidth, height: v.canvasHeight }}
           onGradientChange={(g) => onUpdateText({ backgroundColor: g })}
           onChangeImage={() => fileRef.current?.click()}
           onChangeLogo={() => logoFileRef.current?.click()}

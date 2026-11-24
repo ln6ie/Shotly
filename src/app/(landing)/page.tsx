@@ -104,7 +104,7 @@ export default function Home() {
               {
                 icon: Download,
                 title: "دقة تصدير فائقة",
-                desc: "احصل على لقطات شاشتك بدقة 1242x2688 بكسل جاهزة للرفع المباشر.",
+                desc: "صدّر صور PNG بدقة 1179×2556 عمودياً أو 2556×1179 أفقياً.",
               },
             ].map((item) => (
               <div key={item.title} className="space-y-4">

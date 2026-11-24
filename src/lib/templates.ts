@@ -17,7 +17,7 @@ export const PANORAMIC_THEMES: PanoramicTheme[] = [
         bgOverride: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
         decoration: {
           type: "path",
-          data: "M0,937 C282,750 564,1125 1242,843 L1242,2688 L0,2688 Z",
+          data: "M0,889 C268,712 535,1068 1179,800 L1179,2556 L0,2556 Z",
           fill: "rgba(56, 189, 248, 0.1)",
           x: 0,
           y: 0,

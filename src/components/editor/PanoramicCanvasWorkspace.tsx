@@ -3,6 +3,7 @@
 import { useRef, useState, useLayoutEffect } from "react";
 import type { AppScreen, PanoramicCanvasWorkspaceProps } from "@/types";
 import { updateScreen } from "@/actions/projectState";
+import { getCanvasDimensions } from "@/actions/canvasHelpers";
 import SingleCanvasInstance from "./SingleCanvasInstance";
 
 export default function PanoramicCanvasWorkspace({
@@ -21,9 +22,10 @@ export default function PanoramicCanvasWorkspace({
   useLayoutEffect(() => {
     if (!activeScreen) return;
     const isMobile = window.innerWidth < 768;
-    const isLandscape = activeScreen.config?.layout === "text-left";
-    const canvasWidth = isLandscape ? 2778 : 1242;
-    const canvasHeight = isLandscape ? 1284 : 2688;
+    const layout = activeScreen.config?.layout || "text-top";
+    const isLandscape = layout === "text-left";
+    const { width: canvasWidth, height: canvasHeight } =
+      getCanvasDimensions(layout);
     const availableWidth =
       window.innerWidth - (isMobile ? (isLandscape ? 144 : 104) : 160);
     const availableHeight = window.innerHeight - (isMobile ? 300 : 240);

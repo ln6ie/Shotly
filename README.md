@@ -18,7 +18,7 @@ Shotly is a browser-based editor for creating coordinated app-store screenshots.
 - Edit headings, supporting text, and badges directly on the canvas.
 - Add an app screenshot, logo, and custom background image to each screen.
 - Choose portrait or landscape layouts, device frame colors, and background colors.
-- Export individual screens or the complete set as high-resolution PNG files.
+- Export individual screens or the complete set as PNG: 1179 × 2556 px portrait or 2556 × 1179 px landscape.
 - Work in Arabic and English layouts from a responsive browser editor.
 
 ## Get started
